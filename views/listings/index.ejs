@@ -1,0 +1,128 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+    #filters {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .filter {
+        text-align: center;
+        margin-right: 3rem;
+        margin-top: 2rem;
+        opacity: 0.7;
+    }
+
+    .filter:hover {
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    .filter p {
+        font-size: 0.8rem;
+    }
+
+    .tax-toggle {
+        border: 1px solid black;
+        border-radius: 1rem;
+        height: 3.25rem;
+        padding: 1rem;
+        margin-left: 12rem;
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+</style>
+
+<div id="filters">
+    <div class="filter" onclick="filterListings('Rooms')">
+        <div><i class="fa-solid fa-bed"></i></div>
+        <p>Rooms</p>
+    </div>
+    <div class="filter" onclick="filterListings('Iconic Cities')">
+        <div><i class="fa-solid fa-mountain-city"></i></div>
+        <p>Iconic Cities</p>
+    </div>
+    <div class="filter" onclick="filterListings('Mountains')">
+        <div><i class="fa-solid fa-mountain"></i></div>
+        <p>Mountains</p>
+    </div>
+    <div class="filter" onclick="filterListings('Castles')">
+        <div><i class="fa-brands fa-fort-awesome"></i></div>
+        <p>Castles</p>
+    </div>
+    <div class="filter" onclick="filterListings('Arctic')">
+        <div><i class="fa-solid fa-snowflake"></i></div>
+        <p>Arctic</p>
+    </div>
+    <div class="filter" onclick="filterListings('Camping')">
+        <div><i class="fa-solid fa-campground"></i></div>
+        <p>Camping</p>
+    </div>
+    <div class="filter" onclick="filterListings('Farms')">
+        <div><i class="fa-solid fa-cow"></i></div>
+        <p>Farms</p>
+    </div>
+    <div class="filter" onclick="filterListings('Others')">
+        <div><i class="fa-solid fa-arrow-right"></i></div>
+        <p>Others</p>
+    </div>
+
+    <div class="tax-toggle">
+        <div class="form-check-reverse form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterListings(category) {
+        const url = new URL(window.location.href);
+        if (category) {
+            url.searchParams.set('category', category);
+        } else {
+            url.searchParams.delete('category');
+        }
+        window.location.href = url.toString();
+    }
+</script>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <% for(let listing of allListings) { %>
+    <a href="/listings/<%= listing._id %>" class="listing-link">
+        <div class="card col listing-card">
+            <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem;">
+            <div class="card-img-overlay"></div>
+            <div class="card-body">
+                <p class="card-text">
+                    <b><%= listing.title %></b><br>
+                    &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
+                </p>
+            </div>
+        </div>
+    </a>
+    <% } %>
+</div>
+
+<script>
+    let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+    taxSwitch.addEventListener("click", () => {
+        const listingCards = document.querySelectorAll('.listing-card');
+        listingCards.forEach(card => {
+            const priceElement = card.querySelector('.card-text');
+            const price = parseFloat(priceElement.textContent.match(/[\d,]+/)[0].replace(/,/g, ''));
+            if(taxSwitch.checked) {
+                const newPrice = price * 1.18;
+                priceElement.innerHTML = `<b>${priceElement.querySelector('b').textContent}</b><br>&#8377; ${newPrice.toLocaleString("en-IN")} / night &nbsp;&nbsp; <i><u>total after taxes</u></i>`;
+            }
+            else {
+                const newPrice = price / 1.18;
+                priceElement.innerHTML = `<b>${priceElement.querySelector('b').textContent}</b><br>&#8377; ${newPrice.toLocaleString("en-IN")} / night `;
+            }
+            // const newPrice = taxSwitch.checked ? price * 1.18 : price / 1.18;
+        });
+    });
+</script>
