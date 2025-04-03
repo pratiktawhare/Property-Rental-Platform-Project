@@ -14,6 +14,7 @@ const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const wrapAsync = require("../utils/wrapAsync.js");
 const User = require("./models/user");
 
 const Listing = require("./models/listing.js");
@@ -82,9 +83,15 @@ app.use((req, res, next) => {
     next();
 })
 
+
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
+
+app.get("/", wrapAsync(async (req, res) => {
+    const allListings = await Listing.find({});
+    res.render("listings/index.ejs", { allListings });
+}))
 
 app.all("*", (req, res, next) => {
     next(new ExpressError(404, "Page not found!"));
