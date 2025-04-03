@@ -133,3 +133,48 @@ body {
     height: 400px;
     width: 80vh;
 }
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .navbar {
+        height: auto; /* Allow navbar to adjust height */
+    }
+
+    .listing-card {
+        margin-bottom: 1rem; /* Reduce margin for smaller screens */
+    }
+
+    .card-img-top {
+        height: auto; /* Ensure images maintain aspect ratio */
+    }
+
+    .btns {
+        display: flex; /* Use flexbox for alignment */
+        justify-content: space-around; /* Space between buttons */
+    }
+
+    .edit-btn, .delete-btn {
+        padding: 5px 10px !important; /* Keep padding consistent */
+        font-size: 1rem !important; /* Set font size to match */
+        margin: 5px; /* Maintain margin for spacing */
+        width: auto !important; /* Set width to auto for a more compact button */
+    }
+
+    .logo {
+        height: 50px; /* Adjust logo size for mobile */
+    }
+
+    #map {
+        height: 300px; /* Reduce map height on mobile */
+        width: 100%; /* Full width on mobile */
+    }
+}
+
+/* Dropdown Menu Adjustments */
+.dropdown-menu {
+    position: absolute; /* Ensure the dropdown is positioned absolutely */
+    z-index: 1000; /* Set a high z-index to appear above other elements */
+    top: 100%; /* Position it below the button */
+    left: 0; /* Align it to the left */
+    right: 0; /* Ensure it stretches to the right */
+}
