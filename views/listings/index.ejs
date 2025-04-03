@@ -91,19 +91,25 @@
 </script>
 
 <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
-    <% for(let listing of allListings) { %>
-    <a href="/listings/<%= listing._id %>" class="listing-link">
-        <div class="card col listing-card">
-            <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem;">
-            <div class="card-img-overlay"></div>
-            <div class="card-body">
-                <p class="card-text">
-                    <b><%= listing.title %></b><br>
-                    &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
-                </p>
-            </div>
+    <% if (allListings.length === 0) { %>
+        <div class="col-12">
+            <h3>No listings available at the moment.</h3>
         </div>
-    </a>
+    <% } else { %>
+        <% for(let listing of allListings) { %>
+        <a href="/listings/<%= listing._id %>" class="listing-link">
+            <div class="card col listing-card">
+                <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem;">
+                <div class="card-img-overlay"></div>
+                <div class="card-body">
+                    <p class="card-text" data-original-price="<%= listing.price %>">
+                        <b><%= listing.title %></b><br>
+                        &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
+                    </p>
+                </div>
+            </div>
+        </a>
+        <% } %>
     <% } %>
 </div>
 
@@ -113,16 +119,9 @@
         const listingCards = document.querySelectorAll('.listing-card');
         listingCards.forEach(card => {
             const priceElement = card.querySelector('.card-text');
-            const price = parseFloat(priceElement.textContent.match(/[\d,]+/)[0].replace(/,/g, ''));
-            if(taxSwitch.checked) {
-                const newPrice = price * 1.18;
-                priceElement.innerHTML = `<b>${priceElement.querySelector('b').textContent}</b><br>&#8377; ${newPrice.toLocaleString("en-IN")} / night &nbsp;&nbsp; <i><u>total after taxes</u></i>`;
-            }
-            else {
-                const newPrice = price / 1.18;
-                priceElement.innerHTML = `<b>${priceElement.querySelector('b').textContent}</b><br>&#8377; ${newPrice.toLocaleString("en-IN")} / night `;
-            }
-            // const newPrice = taxSwitch.checked ? price * 1.18 : price / 1.18;
+            const originalPrice = parseFloat(priceElement.getAttribute('data-original-price'));
+            const newPrice = taxSwitch.checked ? (originalPrice * 1.18).toFixed(2) : originalPrice.toFixed(2); // Ensure two decimal places
+            priceElement.innerHTML = `<b>${priceElement.querySelector('b').textContent}</b><br>&#8377; ${newPrice.toLocaleString("en-IN")} / night ${taxSwitch.checked ? '&nbsp;&nbsp; <i><u>total after taxes</u></i>' : ''}`;
         });
     });
 </script>
