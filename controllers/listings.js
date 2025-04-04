@@ -7,7 +7,47 @@ module.exports.index = async (req, res) => {
 const { category } = req.query;
 const query = category ? { category } : {};
 const allListings = await Listing.find(query);
-    res.render("listings/index.ejs", { allListings });
+    res.render("listings/index.ejs", { 
+        allListings,
+        query: req.query 
+    });
+};
+
+module.exports.searchListings = async (req, res) => {
+    const { q, category, minPrice, maxPrice, location } = req.query;
+    const query = {};
+    
+    // Text search
+    if (q) {
+        query.$or = [
+            { title: { $regex: q, $options: 'i' } },
+            { description: { $regex: q, $options: 'i' } },
+            { location: { $regex: q, $options: 'i' } }
+        ];
+    }
+
+    // Category filter
+    if (category) {
+        query.category = category;
+    }
+
+    // Price range filter
+    if (minPrice || maxPrice) {
+        query.price = {};
+        if (minPrice) query.price.$gte = Number(minPrice);
+        if (maxPrice) query.price.$lte = Number(maxPrice);
+    }
+
+    // Location filter (basic implementation)
+    if (location) {
+        query.location = { $regex: location, $options: 'i' };
+    }
+
+    const results = await Listing.find(query);
+    res.render("listings/index.ejs", { 
+        allListings: results,
+        query: req.query 
+    });
 };
 
 module.exports.renderNewForm = (req, res) => {

@@ -14,7 +14,7 @@ module.exports.signup = async(req, res) => {
             if (err) {
                 return next(err);
             }
-            req.flash("success", "Welcome to HouseHunt!");
+            req.flash("success", "Welcome to Nivaas-Luxe!");
             res.redirect("/listings");
         });
     } catch (e) {

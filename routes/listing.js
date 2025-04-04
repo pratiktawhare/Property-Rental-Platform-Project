@@ -8,7 +8,7 @@ const multer = require("multer");
 const { storage } = require("../cloudConfig.js");
 const upload = multer({ storage: storage }); // Use CloudinaryStorage here
 
-// Index and Create Route
+//Index and Create Route
 router.route("/")
     .get(wrapAsync(listingController.index))
     .post(
@@ -18,6 +18,8 @@ router.route("/")
         wrapAsync(listingController.createListing)
     );
 
+// Search Route
+router.get("/search", wrapAsync(listingController.searchListings));
 
 //New Route
 router.get("/new", isLoggedIn, listingController.renderNewForm);
