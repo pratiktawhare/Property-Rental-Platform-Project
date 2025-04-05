@@ -409,10 +409,13 @@ body::before {
     color: #222222 !important;
 }
 
-/* Review form labels */
+/* Review form labels and validation */
 #reviews .form-label,
 .review-form .form-label,
-.starability-slot label {
+.starability-slot label,
+.review-form .invalid-feedback,
+#comment.invalid-feedback,
+.invalid-feedback {
     color: var(--crystal-white) !important;
     text-shadow: var(--text-glow);
 }
@@ -424,10 +427,22 @@ body::before {
 
 /* Ensure other cards and elements maintain dark theme */
 .card:not(.show-card):not(.listing-card) .card-body,
-.card:not(.show-card):not(.listing-card) .card-text,
+.card:not(.show-card):not(.listing-card) .card-text {
+    color: var(--crystal-white) !important;
+}
+
+/* Flash messages with dark text */
 .alert,
 .alert * {
-    color: var(--crystal-white) !important;
+    color: #222222 !important;
+}
+.alert-success {
+    background-color: #d1e7dd !important;
+    border-color: #badbcc !important;
+}
+.alert-danger {
+    background-color: #f8d7da !important;
+    border-color: #f5c2c7 !important;
 }
 
 /* New Page */
