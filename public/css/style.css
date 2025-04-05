@@ -29,11 +29,45 @@ body {
     flex-direction: column;
     min-height: 100vh;
     background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
-    color: var(--crystal-white);
+    color: var(--crystal-white) !important;
     text-shadow: var(--text-glow);
     animation: fadeIn 1s ease-out, gradientFlow 15s ease infinite;
     position: relative;
     overflow-x: hidden;
+}
+
+/* Ensure all text elements are white */
+body * {
+    color: var(--crystal-white) !important;
+}
+
+/* Form inputs */
+.form-control, .form-select, .form-label {
+    color: var(--crystal-white) !important;
+}
+
+.form-control::placeholder {
+    color: rgba(230, 230, 230, 0.7) !important;
+}
+
+/* Cards */
+.card, .card-body, .card-title, .card-text {
+    color: var(--crystal-white) !important;
+}
+
+/* Buttons */
+.btn {
+    color: var(--crystal-white) !important;
+}
+
+/* Links */
+a {
+    color: var(--crystal-white) !important;
+}
+
+/* Footer */
+.f-info, .f-info * {
+    color: var(--crystal-white) !important;
 }
 
 body::before {
@@ -178,11 +212,12 @@ body::before {
 
 .f-info-links a {
     text-decoration: none;
-    color: #222222;
+    color: var(--crystal-white) !important;
 }
 
-.f-info-links a:hover{
+.f-info-links a:hover {
     text-decoration: underline;
+    color: var(--teal-accent) !important;
 }
 
 .f-info-links, .f-info-socials, .f-info-brand{
@@ -295,20 +330,20 @@ body::before {
 }
 
 .filter-icon {
-    color: #ffffff !important;
+    color: #222222 !important; /* Dark text for white background */
     font-size: 1.5rem !important;
-    text-shadow: 0 0 10px #ffffff;
+    text-shadow: 0 0 10px rgba(0,0,0,0.2);
     transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.8);
     padding: 0.5rem;
     border-radius: 50%;
 }
 
 .filter-icon:hover {
-    color: #ffffff !important;
+    color: #222222 !important;
     transform: scale(1.2);
-    text-shadow: 0 0 20px #ffffff;
-    background: rgba(255, 255, 255, 0.3);
+    text-shadow: 0 0 20px rgba(0,0,0,0.3);
+    background: rgba(255, 255, 255, 1);
 }
 
 .card-body {
@@ -317,10 +352,12 @@ body::before {
 
 .card-text p {
     font-weight: 400 !important;
+    color: var(--crystal-white) !important;
 }
 
 .listing-link {
     text-decoration: none;
+    color: var(--crystal-white) !important;
 }
 
 /* Card Effect */
@@ -331,6 +368,66 @@ body::before {
 .card-img-overlay:hover {
     opacity: 0.2;
     background-color: white;
+    color: #222222 !important;
+}
+
+/* White background elements with dark text */
+.card-img-overlay:hover,
+.show-card .card-body,
+.show-card .card-text,
+.listing-card .card-body,
+.listing-card .card-text b,  /* Target listing titles */
+.form-control,
+.form-select,
+.invalid-feedback,
+.valid-feedback,
+.show-card .card-body .card-text {
+    color: #222222 !important;
+}
+
+/* Filter elements with white text */
+.filter,
+.tax-toggle,
+.filter p,
+.tax-toggle label {
+    color: var(--crystal-white) !important;
+}
+
+/* Listing card text */
+.listing-card .card-text {
+    color: #222222 !important;
+}
+
+/* Total after taxes text */
+.listing-card .card-text i,
+.listing-card .card-text u {
+    color: #222222 !important;
+}
+
+/* Listing titles */
+.listing-card .card-text b {
+    color: #222222 !important;
+}
+
+/* Review form labels */
+#reviews .form-label,
+.review-form .form-label,
+.starability-slot label {
+    color: var(--crystal-white) !important;
+    text-shadow: var(--text-glow);
+}
+
+/* Form placeholders */
+.form-control::placeholder {
+    color: rgba(34, 34, 34, 0.7) !important;
+}
+
+/* Ensure other cards and elements maintain dark theme */
+.card:not(.show-card):not(.listing-card) .card-body,
+.card:not(.show-card):not(.listing-card) .card-text,
+.alert,
+.alert * {
+    color: var(--crystal-white) !important;
 }
 
 /* New Page */
@@ -389,6 +486,30 @@ body::before {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
+}
+
+/* Review Section */
+.review-card {
+    background: rgba(0, 0, 0, 0.2) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 206, 209, 0.2) !important;
+    border-radius: 1rem !important;
+    transition: all 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border-color: rgba(0, 206, 209, 0.4) !important;
+}
+
+.review-card .card-body {
+    color: var(--crystal-white);
+}
+
+.review-card .card-title {
+    color: var(--crystal-white) !important;
+    text-shadow: var(--text-glow);
 }
 
 /* Show Page */
