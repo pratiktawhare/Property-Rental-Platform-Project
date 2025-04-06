@@ -15,6 +15,13 @@ router.route("/login")
     .get(userController.renderLoginForm)
     .post(saveRedirectUrl, passport.authenticate("local", { failureRedirect: "/login", failureFlash: true }), userController.login);
 
-router.get("/logout", userController.logout)
+router.get("/logout", userController.logout);
+router.get("/users/dashboard", (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        req.flash("error", "You must be signed in");
+        return res.redirect("/login");
+    }
+    next();
+}, userController.renderDashboard);
 
 module.exports = router;

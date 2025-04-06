@@ -1,0 +1,39 @@
+<%- include('../includes/header') %>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Cancel Booking</h4>
+                </div>
+                <div class="card-body">
+                    <% if (daysUntilCheckIn < 2) { %>
+                        <div class="alert alert-warning">
+                            <h5>Cancellation Policy</h5>
+                            <p>Bookings cannot be cancelled within 48 hours of check-in.</p>
+                            <p>Your check-in is in <%= daysUntilCheckIn %> days.</p>
+                        </div>
+                        <a href="/users/dashboard" class="btn btn-primary">Back to Dashboard</a>
+                    <% } else { %>
+                        <form action="/bookings/<%= booking._id %>/cancel" method="POST">
+                            <div class="form-group">
+                                <label for="reason">Cancellation Reason</label>
+                                <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
+                            </div>
+                            <div class="alert alert-info">
+                                <h5>Cancellation Policy</h5>
+                                <p>Cancellations made at least 48 hours before check-in will receive a full refund.</p>
+                                <p>Your check-in is in <%= daysUntilCheckIn %> days.</p>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+                            <a href="/users/dashboard" class="btn btn-secondary">Cancel</a>
+                        </form>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../includes/footer') %>

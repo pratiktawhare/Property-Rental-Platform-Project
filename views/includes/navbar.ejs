@@ -3,17 +3,19 @@
     background-color: #fe424d;
     color: #fff;
     border-radius: 25px;
-    padding: 0 1rem 0 1rem;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.85rem;
   }
 
   .search-btn:hover {
-    background-color: #fe424d;
-    color: #fff;
+    background-color: #e53935;
+    transform: scale(1.05);
   }
 
   .search-btn i {
     display: inline;
-    margin-right: 0.5rem;
+    margin-right: 0.3rem;
+    font-size: 0.8rem;
   }
 
   .search-inp {
@@ -53,14 +55,18 @@
             <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
           </form>
         </div>
-        <div class="navbar-nav ms-auto">
-          <a class="nav-link" href="/listings/new">Add your home</a>
+        <div class="navbar-nav ms-auto" style="font-size: 0.85rem;">
+          <a class="nav-link" href="/listings/new" style="padding: 0.3rem 0.8rem;">Add your home</a>
           <% if(!currentUser) { %>
-          <a class="nav-link" href="/signup"><b>Sign up</b></a>
-          <a class="nav-link" href="/login"><b>Log in</b></a>
+          <a class="nav-link" href="/signup" style="padding: 0.3rem 0.8rem;"><b>Sign up</b></a>
+          <a class="nav-link" href="/login" style="padding: 0.3rem 0.8rem;"><b>Log in</b></a>
           <% } %>
           <% if(currentUser) { %>
-          <a class="nav-link" href="/logout"><b>Log out</b></a>
+            <a class="nav-link" href="/users/dashboard" style="padding: 0.3rem 0.8rem;"><b>My Bookings</b></a>
+            <a class="nav-link btn me-2" href="/listings/owner/all-bookings" style="border-radius: 20px; padding: 0.3rem 0.8rem; font-size: 0.85rem; border: none; color: var(--teal-accent);">
+              <i class="fas fa-tachometer-alt me-1" style="font-size: 0.8rem;"></i> Owner Dashboard
+            </a>
+            <a class="nav-link" href="/logout" style="padding: 0.3rem 0.8rem;"><b>Log out</b></a>
           <% } %>
         </div>
       </div>

@@ -16,7 +16,15 @@ const userSchema = new Schema({
             },
             message: props => `${props.value} is not a valid phone number!`
         }
-    }
+    },
+    bookings: [{
+        type: Schema.Types.ObjectId,
+        ref: "Booking"
+    }],
+    listings: [{
+        type: Schema.Types.ObjectId,
+        ref: "Listing"
+    }]
 });
 
 userSchema.plugin(passportLocalMongoose);

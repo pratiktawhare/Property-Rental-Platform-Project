@@ -1,0 +1,80 @@
+<%- include('../layouts/boilerplate') %>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Complete Payment for <%= listing.title %></h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <p>Booking ID: <%= booking._id %></p>
+                        <div class="price-breakdown">
+                            <p>Subtotal: ₹<%= (booking.subtotal / 100).toFixed(2) %></p>
+                            <p>Tax (18%): ₹<%= (booking.tax / 100).toFixed(2) %></p>
+                            <hr>
+                            <p class="fw-bold">Total: ₹<%= (order.amount / 100).toFixed(2) %></p>
+                        </div>
+                    </div>
+
+                    <form id="payment-form">
+                        <input type="hidden" name="bookingId" value="<%= booking._id %>">
+                        <input type="hidden" name="razorpayOrderId" value="<%= order.id %>">
+                        
+                        <div id="razorpay-container"></div>
+                        
+                        <div class="d-grid gap-2 mt-3">
+                            <button type="button" id="pay-now" class="btn btn-success">Pay Now</button>
+                            <a href="/listings/<%= listing._id %>" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.getElementById('pay-now').addEventListener('click', function() {
+        const options = {
+            key: '<%= key_id %>',
+            amount: '<%= order.amount %>',
+            currency: 'INR',
+            name: 'Booking Payment',
+            description: 'Booking for <%= listing.title %>',
+            order_id: '<%= order.id %>',
+            handler: function(response) {
+                // Submit payment details to server
+                fetch('/bookings/verify-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_signature: response.razorpay_signature,
+                        bookingId: '<%= booking._id %>'
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.success) {
+                        window.location.href = '/listings/<%= listing._id %>?payment=success';
+                    } else {
+                        alert('Payment verification failed');
+                        window.location.href = '/listings/<%= listing._id %>/book';
+                    }
+                });
+            },
+            theme: {
+                color: '#3399cc'
+            }
+        };
+        
+        const rzp = new Razorpay(options);
+        rzp.open();
+    });
+</script>

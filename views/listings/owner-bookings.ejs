@@ -1,0 +1,47 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container my-5">
+    <h1>Bookings for <%= listing.title %></h1>
+    
+<% if (!listing.bookings || listing.bookings.length === 0) { %>
+        <div class="alert alert-info">
+            No bookings yet for this property.
+        </div>
+    <% } else { %>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Guest</th>
+                        <th>Check-in</th>
+                        <th>Check-out</th>
+                        <th>Guests</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% listing.bookings.forEach(booking => { %>
+                        <tr>
+                            <td>
+                                <%= booking.user.username %><br>
+                                <small><%= booking.user.email %></small><br>
+                                <small><%= booking.user.phone %></small>
+                            </td>
+                            <td><%= booking.checkIn.toDateString() %></td>
+                            <td><%= booking.checkOut.toDateString() %></td>
+                            <td><%= booking.guests %></td>
+                            <td>₹<%= booking.totalPrice %></td>
+                            <td>
+                                <span class="badge bg-<%= booking.status === 'confirmed' ? 'success' : 'warning' %>">
+                                    <%= booking.status %>
+                                </span>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+    <a href="/listings/<%= listing._id %>" class="btn btn-primary">Back to Listing</a>
+</div>

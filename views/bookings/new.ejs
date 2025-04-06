@@ -1,0 +1,7 @@
+<%- include('../layouts/boilerplate', {
+    body: include('./_new-content', {
+        listing: listing,
+        booking: booking || null,
+        currentUser: currentUser
+    })
+}) %>

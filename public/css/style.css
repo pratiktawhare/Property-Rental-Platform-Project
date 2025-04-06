@@ -36,23 +36,73 @@ body {
     overflow-x: hidden;
 }
 
-/* Ensure all text elements are white */
-body * {
+/* Maintain white text for elements with animated background */
+body,
+.navbar,
+.nav-link,
+.f-info,
+.f-info *,
+.f-info-links a,
+.f-info-socials i,
+.f-info-brand,
+.brand-name,
+.navbar-brand,
+.listing-link,
+.review-card .card-body,
+.review-card .card-title,
+.filter,
+.tax-toggle,
+.filter p,
+.tax-toggle label,
+#reviews .form-label,
+.review-form .form-label,
+.starability-slot label,
+.review-form .invalid-feedback,
+#comment.invalid-feedback,
+.card:not(.show-card):not(.listing-card) .card-body,
+.card:not(.show-card):not(.listing-card) .card-text {
     color: var(--crystal-white) !important;
 }
 
 /* Form inputs */
-.form-control, .form-select, .form-label {
+.form-control, .form-select {
+    color: #111111 !important;
+    background-color: white !important;
+}
+
+/* Login/Signup form labels */
+.form-label {
+    color: #666666 !important; /* Lighter gray for better contrast */
+    font-weight: 600;
+}
+
+/* Auth form labels */
+form.needs-validation .form-label,
+.auth-form .form-label {
     color: var(--crystal-white) !important;
 }
 
 .form-control::placeholder {
-    color: rgba(230, 230, 230, 0.7) !important;
+    color: rgba(17, 17, 17, 0.8) !important;
 }
 
 /* Cards */
-.card, .card-body, .card-title, .card-text {
+.card {
+    background-color: white !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+}
+
+.card-header {
+    background-color: var(--primary-gradient-start) !important;
     color: var(--crystal-white) !important;
+}
+
+.card-body, .card-title, .card-text {
+    color: #111111 !important;
+}
+
+.card-title {
+    font-weight: 600;
 }
 
 /* Buttons */
@@ -110,7 +160,7 @@ body::before {
 
 /* NavBar */
 .navbar {
-    height: 5rem;
+    height: 4.5rem;
     background: linear-gradient(90deg, 
         rgba(26, 26, 46, 0.9), 
         rgba(22, 33, 62, 0.9));
@@ -121,7 +171,7 @@ body::before {
     box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
-    padding: 0 2rem;
+    padding: 0 1.5rem;
 }
 
 .navbar-brand {
@@ -182,10 +232,12 @@ body::before {
     color: var(--crystal-white) !important;
     position: relative;
     font-weight: 600;
-    letter-spacing: 1px;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
     transition: all 0.4s ease;
     text-transform: uppercase;
     text-shadow: var(--text-glow);
+    padding: 0.5rem 0.8rem;
 }
 
 .nav-link:hover {
@@ -371,18 +423,16 @@ body::before {
     color: #222222 !important;
 }
 
-/* White background elements with dark text */
+/* Light background elements */
 .card-img-overlay:hover,
 .show-card .card-body,
 .show-card .card-text,
 .listing-card .card-body,
-.listing-card .card-text b,  /* Target listing titles */
-.form-control,
-.form-select,
+.listing-card .card-text b,
 .invalid-feedback,
-.valid-feedback,
-.show-card .card-body .card-text {
+.valid-feedback {
     color: #222222 !important;
+    background-color: white !important;
 }
 
 /* Filter elements with white text */
@@ -425,16 +475,38 @@ body::before {
     color: rgba(34, 34, 34, 0.7) !important;
 }
 
-/* Ensure other cards and elements maintain dark theme */
+/* Ensure proper contrast for light background elements */
+.show-card .card-body,
+.show-card .card-text,
+.listing-card .card-body,
+.listing-card .card-text,
+.new-content-container,
+.new-content-container *:not(.form-label) {
+    color: #222222 !important; /* Darker text for better contrast */
+}
+
+/* New content form labels */
+.new-content-container .form-label {
+    color: #444444 !important; /* Slightly lighter than body text */
+}
+
+/* Maintain white text for dark backgrounds */
 .card:not(.show-card):not(.listing-card) .card-body,
 .card:not(.show-card):not(.listing-card) .card-text {
     color: var(--crystal-white) !important;
 }
 
-/* Flash messages with dark text */
+/* Flash messages */
 .alert,
 .alert * {
-    color: #222222 !important;
+    color: #111111 !important;
+    background-color: white !important;
+    border: none !important;
+}
+
+.alert a {
+    color: var(--teal-accent) !important;
+    text-decoration: underline;
 }
 .alert-success {
     background-color: #d1e7dd !important;
@@ -624,4 +696,44 @@ body::before {
     top: 100%;
     left: 0;
     right: 0;
+}
+
+/* Booked date styling */
+input[type="date"].booked {
+    color: #ff0000 !important;
+    background-color: rgba(255, 0, 0, 0.1) !important;
+    border: 1px solid #ff0000 !important;
+    padding-right: 60px !important;
+    position: relative;
+}
+
+input[type="date"].booked::after {
+    content: "Booked";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ff0000;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+/* Browser-specific styles */
+input[type="date"].booked::-webkit-datetime-edit {
+    color: #ff0000 !important;
+}
+
+input[type="date"].booked::-webkit-inner-spin-button,
+input[type="date"].booked::-webkit-calendar-picker-indicator {
+    filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8);
+}
+
+input[type="date"].booked::-moz-datetime-edit {
+    color: #ff0000 !important;
+}
+
+@keyframes pulseWarning {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }

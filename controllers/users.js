@@ -28,9 +28,14 @@ module.exports.renderLoginForm = (req, res) => {
 };
 
 module.exports.login = async(req, res) => {
-    req.flash("success", "Welcome back to Nivaas-Luxe!");
-    let redirectUrl = res.locals.redirectUrl || "/listings";
-    res.redirect(redirectUrl);
+    // Populate user listings after successful login
+    const user = await User.findById(req.user._id).populate('listings');
+    req.login(user, (err) => {
+        if (err) return next(err);
+        req.flash("success", "Welcome back to Nivaas-Luxe!");
+        let redirectUrl = res.locals.redirectUrl || "/listings";
+        res.redirect(redirectUrl);
+    });
 };
 
 module.exports.logout = (req, res) => {
@@ -41,4 +46,20 @@ module.exports.logout = (req, res) => {
         req.flash("success", "You are logged out!");
         res.redirect("/listings");
     })
+};
+
+module.exports.renderDashboard = async (req, res) => {
+    // First get user without population to check if bookings exist
+    const user = await User.findById(req.user._id);
+    
+    if (user.bookings && user.bookings.length > 0) {
+        await user.populate({
+            path: 'bookings',
+            populate: {
+                path: 'listing',
+                select: 'title'
+            }
+        });
+    }
+    res.render("users/dashboard.ejs", { user });
 };

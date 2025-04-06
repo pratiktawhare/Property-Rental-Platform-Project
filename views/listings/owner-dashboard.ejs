@@ -1,0 +1,70 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5">
+    <h2 class="mb-4">My Listings and Bookings</h2>
+    
+    <% listings.forEach(listing => { %>
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4><%= listing.title %></h4>
+                        <p class="mb-0"><i class="fas fa-map-marker-alt"></i> <%= listing.location %></p>
+                    </div>
+                    <a href="/listings/<%= listing._id %>/owner-bookings" class="btn btn-light">
+                        View Details
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <% if(listing.bookings && listing.bookings.length > 0) { %>
+                    <h5>Recent Bookings:</h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Guest</th>
+                                    <th>Dates</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% listing.bookings.slice(0, 3).forEach(booking => { %>
+                                    <tr>
+                                        <td>
+                                            <strong><%= booking.user.username %></strong><br>
+                                            <small><%= booking.user.email %></small>
+                                        </td>
+                                        <td>
+                                            <%= booking.checkIn.toDateString() %> <br>
+                                            to <br>
+                                            <%= booking.checkOut.toDateString() %>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-<%= booking.status === 'confirmed' ? 'success' : 'warning' %>">
+                                                <%= booking.status %>
+                                            </span>
+                                        </td>
+                                        <td>$<%= booking.totalPrice %></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% if(listing.bookings.length > 3) { %>
+                        <a href="/listings/<%= listing._id %>/owner-bookings" class="btn btn-outline-primary">
+                            View All <%= listing.bookings.length %> Bookings
+                        </a>
+                    <% } %>
+                <% } else { %>
+                    <div class="alert alert-info">
+                        No bookings yet for this listing.
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    <% }) %>
+</div>
+
+

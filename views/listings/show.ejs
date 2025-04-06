@@ -1,7 +1,7 @@
 <% layout("/layouts/boilerplate") %>
 <script>
     const mapToken = "<%= process.env.MAP_TOKEN %>";
-    const listing = <%- JSON.stringify(listing) %>;
+    const listing = JSON.parse(decodeURIComponent('<%= encodeURIComponent(JSON.stringify(listing)) %>'));
 </script>
     <div class="row mt-3">
         <div class="col-8 offset-3" style="color: white;">
@@ -21,15 +21,29 @@
 
     <br>
 
-    <% if(currentUser && currentUser._id.equals(listing.owner._id)) { %>
-    <div class="btns">
-        <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>
-        
-        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
-            <button class="btn btn-dark offset-5">Delete</button>
-        </form>
+    <div class="btns d-flex justify-content-center gap-3">
+        <% if(currentUser && currentUser._id.equals(listing.owner._id)) { %>
+            <a href="/listings/<%= listing._id %>/edit" class="btn btn-sm glow-teal" style="background-color: rgba(0, 206, 209, 0.1); color: var(--teal-accent); border: 1px solid var(--teal-accent); border-radius: 20px; padding: 0.3rem 0.8rem; transition: all 0.3s ease; box-shadow: 0 0 8px rgba(0, 206, 209, 0.5);">
+                Edit
+            </a>
+            <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+                <button class="btn btn-sm glow-red" style="background-color: rgba(254, 66, 77, 0.1); color: #fe424d; border: 1px solid #fe424d; border-radius: 20px; padding: 0.3rem 0.8rem; transition: all 0.3s ease; box-shadow: 0 0 8px rgba(254, 66, 77, 0.5);">
+                    Delete
+                </button>
+            </form>
+            <a href="/listings/<%= listing._id %>/owner-bookings" class="btn btn-sm glow-teal" style="background-color: rgba(0, 206, 209, 0.1); color: var(--teal-accent); border: 1px solid var(--teal-accent); border-radius: 20px; padding: 0.3rem 0.8rem; transition: all 0.3s ease; box-shadow: 0 0 8px rgba(0, 206, 209, 0.5);">
+                View Bookings
+            </a>
+        <% } else if (currentUser) { %>
+            <a href="/listings/<%= listing._id %>/book" class="btn btn-primary col-1 offset-3">
+                Book Now
+            </a>
+        <% } else { %>
+            <a href="/login" class="btn btn-primary col-1 offset-3">
+                Login to Book
+            </a>
+        <% } %>
     </div>
-    <% } %>
 
 
     <div class="col-8 offset-3 mb-3">

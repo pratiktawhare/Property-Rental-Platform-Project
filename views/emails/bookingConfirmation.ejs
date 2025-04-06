@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Confirmation - Nivaas-Luxe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            max-width: 150px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3399cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="cid:logo" alt="HouseHunt Logo" class="logo">
+        <h1>Booking Confirmation</h1>
+    </div>
+
+    <p>Hello <%= user.name %>,</p>
+    <p>Thank you for booking with HouseHunt! Your booking details are below:</p>
+
+    <div class="card">
+        <h3><%= listing.title %></h3>
+        <p><strong>Check-in:</strong> <%= booking.checkIn.toDateString() %></p>
+        <p><strong>Check-out:</strong> <%= booking.checkOut.toDateString() %></p>
+        <p><strong>Guests:</strong> <%= booking.guests %></p>
+        <p><strong>Total Paid:</strong> ₹<%= booking.totalPrice %></p>
+        <p><strong>Booking ID:</strong> <%= booking._id %></p>
+    </div>
+
+    <p>You can view and manage your booking by clicking the button below:</p>
+    <a href="<%= bookingUrl %>" class="btn">View Booking</a>
+
+    <p>If you have any questions, please reply to this email.</p>
+    <p>Thank you,<br>The HouseHunt Team</p>
+
+    <div class="footer">
+        <p>© <%= new Date().getFullYear() %> HouseHunt. All rights reserved.</p>
+    </div>
+</body>
+</html>
