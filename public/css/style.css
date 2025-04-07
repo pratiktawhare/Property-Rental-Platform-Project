@@ -272,11 +272,22 @@ body::before {
     color: var(--teal-accent) !important;
 }
 
-.f-info-links, .f-info-socials, .f-info-brand{
+.f-info {
+    padding: 1.5rem 0;
+}
+
+.f-info-links, .f-info-socials, .f-info-brand {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.f-info-links a {
+    padding: 0.5rem;
+    white-space: nowrap;
 }
 
 .f-info-socials i {
@@ -369,9 +380,7 @@ body::before {
 }
 
 .listing-card:hover {
-    transform: translateY(-15px) rotateY(10deg) scale(1.05);
-    box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
-    border-color: rgba(0, 206, 209, 0.3) !important;
+    /* Hover effect removed as requested */
 }
 
 .card-img-top {
@@ -657,6 +666,98 @@ body::before {
 @media (max-width: 768px) {
     .navbar {
         height: auto;
+        padding: 0.5rem 1rem;
+    }
+
+    .f-info {
+        padding: 1rem 0;
+    }
+
+    .f-info-links {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .f-info-links a {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .f-info-socials {
+        margin: 1rem 0;
+    }
+
+    .f-info-brand {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+    }
+
+    /* Mobile navbar layout with properly centered explore button */
+    .navbar-nav.always-visible {
+        display: flex !important;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 1rem;
+        position: relative;
+    }
+
+    .navbar-brand {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .explore-btn-container {
+        position: absolute;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        pointer-events: none;
+    }
+
+    .explore-btn {
+        padding: 0.5rem;
+        white-space: nowrap;
+        pointer-events: auto;
+    }
+
+    .dropdown-container {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .dropdown-toggle {
+        padding: 0.5rem;
+        white-space: nowrap;
+    }
+
+    /* Simplify search form */
+    .navbar-nav form {
+        flex-direction: column;
+        width: 100%;
+        margin: 0.5rem 0;
+        align-items: center;
+    }
+    .search-inp, 
+    .form-select, 
+    .form-control[type="number"] {
+        width: 100% !important;
+        margin: 0.25rem 0 !important;
+    }
+    .search-btn {
+        width: 100%;
+        margin: 0.25rem 0;
+    }
+
+    /* Collapsible menu items */
+    .navbar-collapse {
+        background: linear-gradient(90deg, rgba(26, 26, 46, 0.95), rgba(22, 33, 62, 0.95));
+        padding: 1rem;
+        margin-top: 0.5rem;
+        border-radius: 0.5rem;
     }
 
     .listing-card {
@@ -696,6 +797,36 @@ body::before {
     top: 100%;
     left: 0;
     right: 0;
+    background: linear-gradient(90deg, 
+        rgba(26, 26, 46, 0.95), 
+        rgba(22, 33, 62, 0.95));
+    border: 1px solid var(--teal-accent);
+}
+
+.navbar .dropdown-toggle {
+    color: var(--crystal-white) !important;
+    /* background-color: transparent !important; */
+    border-color: var(--crystal-white) !important;
+    text-shadow: var(--text-glow);
+    transition: all 0.3s ease;
+}
+
+.navbar .dropdown-toggle:hover {
+    color: var(--teal-accent) !important;
+    transform: translateY(-2px);
+}
+
+/* Navbar Toggler */
+.navbar-toggler {
+    border-color: var(--crystal-white) !important;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23e6e6e6' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.25rem rgba(0, 206, 209, 0.5) !important;
 }
 
 /* Booked date styling */

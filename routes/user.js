@@ -24,4 +24,29 @@ router.get("/users/dashboard", (req, res, next) => {
     next();
 }, userController.renderDashboard);
 
+// Policy Pages Routes
+router.get("/privacy-policy", (req, res) => {
+    res.render("policies/privacy");
+});
+
+router.get("/terms-of-service", (req, res) => {
+    res.render("policies/terms");
+});
+
+router.get("/cancellation-policy", (req, res) => {
+    res.render("policies/cancellation");
+});
+
+router.get("/refund-policy", (req, res) => {
+    res.render("policies/refund");
+});
+
+router.get("/trust-safety", (req, res) => {
+    res.render("policies/trust-safety");
+});
+
+router.get("/contact-us", (req, res) => {
+    res.render("policies/contact");
+});
+
 module.exports = router;

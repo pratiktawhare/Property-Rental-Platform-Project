@@ -1,6 +1,37 @@
 document.addEventListener('DOMContentLoaded', function() {
     const bookingForm = document.getElementById('bookingForm');
     if (!bookingForm) return;
+
+    // Flash message functions
+    function showFlashMessage(message, type = 'danger') {
+        const container = document.getElementById('bookingFlashContainer');
+        if (!container) return;
+        
+        // Clear existing messages
+        container.innerHTML = '';
+        
+        // Create new alert element
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show col-12`;
+        alertDiv.setAttribute('role', 'alert');
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        
+        container.appendChild(alertDiv);
+        
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => {
+            const bsAlert = new bootstrap.Alert(alertDiv);
+            bsAlert.close();
+        }, 5000);
+    }
+
+    function clearFlashMessages() {
+        const container = document.getElementById('bookingFlashContainer');
+        if (container) container.innerHTML = '';
+    }
     
     const totalPriceField = document.getElementById('totalPriceField');
     const listingIdEl = document.getElementById('listingId');
@@ -35,13 +66,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         selectedDate >= new Date(range.from) && 
                         selectedDate <= new Date(range.to)
                     );
-                    if (isBooked) {
-                        this.style.backgroundColor = '#ffdddd';
-                        this.style.borderColor = '#ff0000';
-                        this.style.color = '#ff0000';
-                        this.style.fontWeight = 'bold';
-                        alert('This date is already booked');
-                        this.value = '';
+                        if (isBooked) {
+                            this.style.backgroundColor = '#ffdddd';
+                            this.style.borderColor = '#ff0000';
+                            this.style.color = '#ff0000';
+                            this.style.fontWeight = 'bold';
+                            showFlashMessage('This date is already booked');
+                            this.value = '';
                     } else {
                         this.style.backgroundColor = '';
                         this.style.borderColor = '';
@@ -85,9 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Form submission handler
     bookingForm.addEventListener('submit', function(e) {
-        if (!validateForm()) {
-            e.preventDefault();
-            alert('Please fill all required fields and accept terms');
+    if (!validateForm()) {
+        e.preventDefault();
+        showFlashMessage('Please fill all required fields and accept terms');
         } else {
             // Check for date conflicts
             const checkIn = new Date(document.getElementById('checkIn').value);
@@ -100,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (hasConflict) {
                 e.preventDefault();
-                alert('Selected dates conflict with existing bookings');
+                showFlashMessage('Selected dates conflict with existing bookings');
                 return;
             }
             // Update prices before submission
@@ -141,12 +172,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Validate dates
             if (checkIn && checkOut) {
                 if (checkIn < new Date().setHours(0,0,0,0)) {
-                    alert('Check-in date cannot be in the past');
+                    showFlashMessage('Check-in date cannot be in the past');
                     checkInEl.value = '';
                     return;
                 }
                 if (checkOut <= checkIn) {
-                    alert('Check-out date must be after check-in date');
+                    showFlashMessage('Check-out date must be after check-in date');
                     checkOutEl.value = '';
                     return;
                 }
@@ -188,6 +219,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize the booking summary
     updateBookingSummary();
+
+    // Clear flash messages when valid dates are selected
+    document.getElementById('checkIn').addEventListener('change', function() {
+        if (this.value) clearFlashMessages();
+    });
+    document.getElementById('checkOut').addEventListener('change', function() {
+        if (this.value) clearFlashMessages();
+    });
 
     // Handle booking cancellations - redirect to cancel form
     document.querySelectorAll('.cancel-booking-btn').forEach(btn => {

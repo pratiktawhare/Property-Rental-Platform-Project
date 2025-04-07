@@ -392,7 +392,7 @@ module.exports.createBooking = async (req, res) => {
                 $push: { bookings: booking._id }
             });
             
-            req.flash("success", "Booking created successfully! (Test Mode)");
+            req.flash("success", "Booking created successfully!");
             return res.redirect(`/listings/${id}`);
         }
 

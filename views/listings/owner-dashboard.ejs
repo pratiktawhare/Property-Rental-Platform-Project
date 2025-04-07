@@ -1,5 +1,14 @@
 <% layout("/layouts/boilerplate") %>
 
+<style>
+    .btn-view-details {
+        color: black !important;
+    }
+    h5 {
+        color: black;
+    }
+</style>
+
 <div class="container mt-5">
     <h2 class="mb-4">My Listings and Bookings</h2>
     
@@ -11,7 +20,7 @@
                         <h4><%= listing.title %></h4>
                         <p class="mb-0"><i class="fas fa-map-marker-alt"></i> <%= listing.location %></p>
                     </div>
-                    <a href="/listings/<%= listing._id %>/owner-bookings" class="btn btn-light">
+                    <a href="/listings/<%= listing._id %>/owner-bookings" class="btn btn-light btn-view-details">
                         View Details
                     </a>
                 </div>
