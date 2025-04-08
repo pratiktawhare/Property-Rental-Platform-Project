@@ -178,6 +178,7 @@ body::before {
     display: flex;
     align-items: center;
     gap: 1rem;
+    min-width: 0;
 }
 
 @keyframes borderPulse {
@@ -404,7 +405,6 @@ body::before {
     color: #222222 !important;
     transform: scale(1.2);
     text-shadow: 0 0 20px rgba(0,0,0,0.3);
-    background: rgba(255, 255, 255, 1);
 }
 
 .card-body {
@@ -703,10 +703,6 @@ body::before {
         position: relative;
     }
 
-    .navbar-brand {
-        flex: 1;
-        min-width: 0;
-    }
 
     .explore-btn-container {
         position: absolute;
@@ -868,3 +864,4 @@ input[type="date"].booked::-moz-datetime-edit {
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
 }
+
