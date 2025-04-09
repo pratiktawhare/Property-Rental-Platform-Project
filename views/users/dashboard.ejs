@@ -72,7 +72,7 @@
                                         </button>
                                     </form>
                                 <% } else if (new Date(booking.checkIn) > new Date()) { %>
-                                    <form action="/listings/bookings/<%= booking._id %>/cancel" method="POST">
+                                    <form action="/listings/bookings/<%= booking._id %>/cancel" method="GET">
                                         <input type="hidden" name="_method" value="POST">
                                         <button type="submit" class="btn btn-sm btn-outline-danger">
                                             Cancel Booking

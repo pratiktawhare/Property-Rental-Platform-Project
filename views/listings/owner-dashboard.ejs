@@ -7,6 +7,13 @@
     h5 {
         color: black;
     }
+    .btn-outline-primary {
+        color: #000 !important;
+        border-color: #000;
+    }
+    .modal-body {
+        color: #000;
+    }
 </style>
 
 <div class="container mt-5">
@@ -51,8 +58,16 @@
                                             <%= booking.checkOut.toDateString() %>
                                         </td>
                                         <td>
-                                            <span class="badge bg-<%= booking.status === 'confirmed' ? 'success' : 'warning' %>">
+                                            <span class="badge bg-<%= booking.status === 'confirmed' ? 'success' : booking.status === 'cancelled' ? 'danger' : 'warning' %>">
                                                 <%= booking.status %>
+                                                <% if (booking.status === 'cancelled') { %>
+                                                    <button class="btn btn-link p-0 ms-1 text-white" 
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#cancelModal<%= booking._id %>"
+                                                            style="line-height: 1;">
+                                                        <i class="bi bi-info-circle-fill fs-6"></i>
+                                                    </button>
+                                                <% } %>
                                             </span>
                                         </td>
                                         <td>$<%= booking.totalPrice %></td>
@@ -76,4 +91,49 @@
     <% }) %>
 </div>
 
+<script>
+// Initialize Bootstrap tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
 
+<% listings.forEach(listing => { %>
+  <% listing.bookings.slice(0, 3).forEach(booking => { %>
+    <% if (booking.status === 'cancelled') { %>
+    <div class="modal fade" id="cancelModal<%= booking._id %>" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title">Cancellation Details</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <h6>Booking for <%= listing.title %></h6>
+              <p class="mb-1"><%= booking.checkIn.toDateString() %> to <%= booking.checkOut.toDateString() %></p>
+            </div>
+            <div class="alert alert-light">
+              <p class="mb-1"><strong>Reason:</strong></p>
+              <p><%= booking.cancellationReason || 'No reason provided' %></p>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <p class="mb-1"><strong>Cancelled by:</strong></p>
+                <p><%= booking.cancelledBy?.username || 'System' %></p>
+              </div>
+              <div class="col-6">
+                <p class="mb-1"><strong>Date:</strong></p>
+                <p><%= booking.cancelledAt.toLocaleString() %></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  <% }) %>
+<% }) %>

@@ -47,54 +47,7 @@ router.post("/:id/book",
 // Payment Verification Route
 router.post("/bookings/verify-payment", 
     isLoggedIn,
-    wrapAsync(async (req, res) => {
-        const { 
-            razorpay_payment_id, 
-            razorpay_order_id, 
-            razorpay_signature,
-            bookingId 
-        } = req.body;
-
-        const booking = await Booking.findById(bookingId);
-        if (!booking) {
-            return res.status(404).json({ success: false, message: "Booking not found" });
-        }
-
-        // Verify payment signature
-        const isValid = verifyPayment(
-            razorpay_order_id,
-            razorpay_payment_id,
-            razorpay_signature
-        );
-
-        if (isValid) {
-            // Update booking status
-            booking.paymentStatus = "completed";
-            booking.razorpayPaymentId = razorpay_payment_id;
-            booking.razorpaySignature = razorpay_signature;
-            await booking.save();
-
-            // Add booking to user's bookings array
-            await User.findByIdAndUpdate(booking.user, {
-                $push: { bookings: booking._id }
-            });
-            
-            // Add booking to listing's bookings array
-            await Listing.findByIdAndUpdate(booking.listing, {
-                $push: { bookings: booking._id }
-            });
-
-            return res.json({ 
-                success: true,
-                bookingId: booking._id
-            });
-        } else {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Payment verification failed" 
-            });
-        }
-    })
+    wrapAsync(listingController.verifyPayment)
 );
 
 router.get("/:id/owner-bookings", isLoggedIn, isOwner, wrapAsync(async (req, res) => {
@@ -116,40 +69,37 @@ router.get("/owner/all-bookings",
         const listings = await Listing.find({ owner: req.user._id })
             .populate({
                 path: 'bookings',
-                populate: {
-                    path: 'user',
-                    select: 'username email phone'
-                }
+                populate: [
+                    {
+                        path: 'user',
+                        select: 'username email phone'
+                    },
+                    {
+                        path: 'cancelledBy',
+                        select: 'username'
+                    }
+                ]
             });
         res.render("listings/owner-dashboard", { listings });
     })
 );
 
-// Booking Cancellation Route
+// Booking Cancellation Routes
+router.get("/bookings/:id/cancel",
+    isLoggedIn,
+    wrapAsync(listingController.renderCancelForm)
+);
+
 router.post(["/bookings/:id/cancel", "/bookings/:id/cancel/"], 
     isLoggedIn,
     wrapAsync(listingController.cancelBooking)
 );
 
 // Booking Deletion Routes
-// DELETE method routes
-router.delete(["/bookings/:id/delete", "/bookings/:id/delete/"], 
-    isLoggedIn,
-    wrapAsync(listingController.deleteBooking)
-);
 
-router.delete(["/bookings/:id", "/bookings/:id/"], 
-    isLoggedIn,
-    wrapAsync(listingController.deleteBooking)
-);
 
-// POST method routes with _method=DELETE override
-router.post(["/bookings/:id/delete", "/bookings/:id/delete/"], 
-    isLoggedIn,
-    wrapAsync(listingController.deleteBooking)
-);
-
-router.post(["/bookings/:id", "/bookings/:id/"], 
+// POST method route with _method=DELETE override
+router.delete("/bookings/:id/delete", 
     isLoggedIn,
     wrapAsync(listingController.deleteBooking)
 );

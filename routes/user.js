@@ -16,13 +16,37 @@ router.route("/login")
     .post(saveRedirectUrl, passport.authenticate("local", { failureRedirect: "/login", failureFlash: true }), userController.login);
 
 router.get("/logout", userController.logout);
-router.get("/users/dashboard", (req, res, next) => {
+router.get("/users/dashboard", async (req, res) => {
     if (!req.isAuthenticated()) {
         req.flash("error", "You must be signed in");
         return res.redirect("/login");
     }
-    next();
-}, userController.renderDashboard);
+    
+    try {
+        const user = await User.findById(req.user._id)
+            .populate({
+                path: 'bookings',
+                populate: {
+                    path: 'listing',
+                    select: 'title image location'
+                }
+            })
+            .populate({
+                path: 'listings',
+                select: 'title image location'
+            });
+            
+        res.render("users/dashboard", {
+            user,
+            bookings: user.bookings,
+            listings: user.listings
+        });
+    } catch (err) {
+        console.error("Dashboard error:", err);
+        req.flash("error", "Failed to load dashboard");
+        res.redirect("/");
+    }
+});
 
 // Policy Pages Routes
 router.get("/privacy-policy", (req, res) => {

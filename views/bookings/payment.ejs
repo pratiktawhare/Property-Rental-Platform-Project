@@ -1,4 +1,10 @@
-<%- include('../layouts/boilerplate') %>
+<% layout("/layouts/boilerplate") %>
+
+<style>
+    .btn-outline-secondary {
+        color: #000 !important;
+    }
+</style>
 
 <div class="container my-5">
     <div class="row">
@@ -11,8 +17,8 @@
                     <div class="alert alert-info">
                         <p>Booking ID: <%= booking._id %></p>
                         <div class="price-breakdown">
-                            <p>Subtotal: ₹<%= (booking.subtotal / 100).toFixed(2) %></p>
-                            <p>Tax (18%): ₹<%= (booking.tax / 100).toFixed(2) %></p>
+                            <p>Subtotal: ₹<%= (booking.subtotal) %></p>
+                            <p>Tax (18%): ₹<%= (booking.tax) %></p>
                             <hr>
                             <p class="fw-bold">Total: ₹<%= (order.amount / 100).toFixed(2) %></p>
                         </div>
@@ -47,7 +53,7 @@
             order_id: '<%= order.id %>',
             handler: function(response) {
                 // Submit payment details to server
-                fetch('/bookings/verify-payment', {
+                fetch('/listings/bookings/verify-payment', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -59,14 +65,24 @@
                         bookingId: '<%= booking._id %>'
                     })
                 })
-                .then(res => res.json())
-                .then(data => {
-                    if(data.success) {
-                        window.location.href = '/listings/<%= listing._id %>?payment=success';
-                    } else {
-                        alert('Payment verification failed');
-                        window.location.href = '/listings/<%= listing._id %>/book';
+                .then(async res => {
+                    const data = await res.json();
+                    if (!res.ok) {
+                        throw new Error(data.message || 'Payment verification failed');
                     }
+                    return data;
+                })
+                .then(data => {
+                    if(data.success && data.redirectUrl) {
+                        window.location.href = data.redirectUrl;
+                    } else {
+                        window.location.href = '/listings/<%= listing._id %>?payment=success';
+                    }
+                })
+                .catch(err => {
+                    console.error('Payment verification error:', err);
+                    alert(err.message);
+                    window.location.href = '/listings/<%= listing._id %>/book';
                 });
             },
             theme: {
