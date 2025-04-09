@@ -454,7 +454,7 @@ module.exports.createBooking = async (req, res) => {
         if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
             booking.paymentStatus = "completed";
             // Status already confirmed
-            // await booking.save();
+            await booking.save();
             
             // Add booking to user's bookings
             await User.findByIdAndUpdate(req.user._id, {
