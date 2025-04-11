@@ -7,6 +7,11 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    userType: {
+        type: String,
+        enum: ["military", "student", "regular"],
+        default: "regular"
+    },
     phone: {
         type: String,
         required: true,

@@ -16,6 +16,31 @@ router.route("/login")
     .post(saveRedirectUrl, passport.authenticate("local", { failureRedirect: "/login", failureFlash: true }), userController.login);
 
 router.get("/logout", userController.logout);
+
+router.route("/users/profile")
+    .get((req, res) => {
+        if (!req.isAuthenticated()) {
+            req.flash("error", "You must be signed in");
+            return res.redirect("/login");
+        }
+        res.render("users/profile", { user: req.user });
+    })
+    .post(wrapAsync(async (req, res) => {
+        if (!req.isAuthenticated()) {
+            req.flash("error", "You must be signed in");
+            return res.redirect("/login");
+        }
+        
+        const { username, userType, phone } = req.body.user;
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user._id,
+            { username, userType, phone },
+            { new: true }
+        );
+        
+        req.flash("success", "Profile updated successfully");
+        res.redirect("/users/profile");
+    }));
 router.get("/users/dashboard", async (req, res) => {
     if (!req.isAuthenticated()) {
         req.flash("error", "You must be signed in");

@@ -93,11 +93,25 @@
                         <span class="text-black">Tax (18%):</span>
                         <span id="taxAmount" class="text-black">₹0</span>
                     </div>
+                    <% if (currentUser && currentUser.userType && currentUser.userType !== 'regular') { %>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-black">Discount (<%= currentUser.userType === 'military' ? '20%' : '15%' %>):</span>
+                            <span id="discountAmount" class="text-success">-₹<%= booking ? booking.discountAmount.toFixed(2) : '0.00' %></span>
+                        </div>
+                    <% } %>
                     <hr>
                     <div class="d-flex justify-content-between fw-bold">
                         <span class="text-black">Total:</span>
                         <span id="totalPrice" class="text-black">₹0</span>
                     </div>
+                    <% if (currentUser && currentUser.userType && currentUser.userType !== 'regular') { %>
+                        <div class="text-success small mt-2">
+                            <i class="bi bi-info-circle"></i> 
+                            <%= currentUser.userType === 'military' ? 
+                                'Thank you for your service! Military discount applied.' : 
+                                'Student discount applied.' %>
+                        </div>
+                    <% } %>
                 </div>
             </div>
         </div>
@@ -124,6 +138,8 @@
 
 <!-- Hidden input to store listing price -->
 <input type="hidden" id="listingPrice" value="<%= listing.price %>">
+<!-- Store user type in body data attribute -->
+<body data-user-type="<%= currentUser.userType %>">
 
 <!-- External JavaScript -->
 <script src="/js/booking.js?v=<%= new Date().getTime() %>"></script>

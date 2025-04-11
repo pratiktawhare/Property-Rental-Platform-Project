@@ -350,11 +350,15 @@ module.exports.renderBookingForm = async (req, res) => {
         return res.redirect("/listings");
     }
     
-    // Initialize empty booking object for new bookings
+    // Initialize booking object with default values
     const booking = {
         status: 'pending',
         user: req.user,
-        listing: listing
+        listing: listing,
+        subtotal: 0,
+        discountAmount: 0,
+        tax: 0,
+        totalPrice: 0
     };
     
     res.render("bookings/new.ejs", { 
@@ -433,16 +437,26 @@ module.exports.createBooking = async (req, res) => {
             });
         }
 
+        // Calculate discount based on user type
+        let discountAmount = 0;
+        if (req.user.userType === 'student') {
+            discountAmount = parseFloat(subtotal) * 0.15;
+        } else if (req.user.userType === 'military') {
+            discountAmount = parseFloat(subtotal) * 0.20;
+        }
+
         // Create booking with initial pending status
         const booking = new Booking({
             checkIn: new Date(checkIn),
             checkOut: new Date(checkOut),
             guests: parseInt(guests),
             subtotal: parseFloat(subtotal),
+            discountAmount: discountAmount,
             tax: parseFloat(tax),
             totalPrice: parseFloat(totalPrice),
             listing: listing._id,
             user: req.user._id,
+            userType: req.user.userType,
             paymentStatus: "pending",
             status: "pending" // Changed to pending until payment completes
         });

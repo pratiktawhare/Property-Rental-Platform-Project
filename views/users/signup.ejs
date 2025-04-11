@@ -26,6 +26,14 @@
                 <label for="password" class="form-label">Password</label>
                 <input name="password" id="password" type="password" class="form-control" required/>
             </div>
+            <div class="mb-3 auth-form">
+                <label for="userType" class="form-label">Account Type</label>
+                <select name="userType" id="userType" class="form-select" required>
+                    <option value="regular">Regular</option>
+                    <option value="student">Student</option>
+                    <option value="military">Military</option>
+                </select>
+            </div>
             <button class="btn btn-success">SignUp</button>
         </form>
     </div>

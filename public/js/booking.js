@@ -189,19 +189,33 @@ document.addEventListener('DOMContentLoaded', function() {
             if (checkIn && checkOut && checkOut > checkIn) {
                 const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
                 const subtotal = nights * pricePerNight;
-                const tax = subtotal * 0.18;
-                const total = subtotal + tax;
+                
+                // Check for user type discount
+                let discountRate = 0;
+                const userType = document.body.dataset.userType;
+                if (userType === 'student') {
+                    discountRate = 0.15;
+                } else if (userType === 'military') {
+                    discountRate = 0.20;
+                }
+                
+                const discountAmount = subtotal * discountRate;
+                const discountedSubtotal = subtotal - discountAmount;
+                const tax = discountedSubtotal * 0.18;
+                const total = discountedSubtotal + tax;
                 
                 // Update summary display
                 const nightsCountEl = document.getElementById('nightsCount');
                 const subtotalPriceEl = document.getElementById('subtotalPrice');
                 const taxAmountEl = document.getElementById('taxAmount');
                 const totalPriceEl = document.getElementById('totalPrice');
+                const discountAmountEl = document.getElementById('discountAmount');
                 
                 if (nightsCountEl) nightsCountEl.textContent = nights;
                 if (subtotalPriceEl) subtotalPriceEl.textContent = `₹${subtotal.toFixed(2)}`;
                 if (taxAmountEl) taxAmountEl.textContent = `₹${tax.toFixed(2)}`;
                 if (totalPriceEl) totalPriceEl.textContent = `₹${total.toFixed(2)}`;
+                if (discountAmountEl) discountAmountEl.textContent = `-₹${discountAmount.toFixed(2)}`;
                 
                 // Update hidden form fields
                 const subtotalField = document.getElementById('subtotalField');

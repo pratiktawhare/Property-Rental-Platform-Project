@@ -1,0 +1,35 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>My Profile</h4>
+                </div>
+                <div class="card-body">
+                    <form action="/users/profile" method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="user[username]" value="<%= user.username %>">
+                        </div>
+                        <div class="mb-3">
+                            <label for="userType" class="form-label">Account Type</label>
+                            <select class="form-select" id="userType" name="user[userType]">
+                                <option value="military" <%= user.userType === 'military' ? 'selected' : '' %>>Military</option>
+                                <option value="student" <%= user.userType === 'student' ? 'selected' : '' %>>Student</option>
+                                <option value="regular" <%= user.userType === 'regular' ? 'selected' : '' %>>Regular</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="user[phone]" value="<%= user.phone %>">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                        <a href="/listings" class="btn btn-outline-secondary ms-2 text-dark">Back to Listings</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

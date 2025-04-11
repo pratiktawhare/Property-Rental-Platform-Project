@@ -18,9 +18,12 @@
                         <p>Booking ID: <%= booking._id %></p>
                         <div class="price-breakdown">
                             <p>Subtotal: ₹<%= (booking.subtotal) %></p>
+                            <% if (booking.discountAmount > 0) { %>
+                                <p>Discount: -₹<%= booking.discountAmount.toFixed(2) %></p>
+                            <% } %>
                             <p>Tax (18%): ₹<%= (booking.tax) %></p>
                             <hr>
-                            <p class="fw-bold">Total: ₹<%= (order.amount / 100).toFixed(2) %></p>
+                            <p class="fw-bold">Total: ₹<%= (booking.subtotal + booking.tax - booking.discountAmount).toFixed(2) %></p>
                         </div>
                     </div>
 

@@ -49,6 +49,15 @@ const bookingSchema = new Schema({
         type: Number,
         required: true
     },
+    discountAmount: {
+        type: Number,
+        default: 0
+    },
+    userType: {
+        type: String,
+        enum: ["regular", "student", "military"],
+        default: "regular"
+    },
     paymentStatus: {
         type: String,
         enum: ["pending", "completed", "failed", "refunded", "refund_failed"],
