@@ -1,3 +1,3 @@
 # Property-Rental-Platform-Project
-[Open Google](https://nivaas-luxe.onrender.com)
+[nivaas-luxe Project link](https://nivaas-luxe.onrender.com)
 
